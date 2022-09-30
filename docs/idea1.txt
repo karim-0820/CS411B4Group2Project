@@ -1,0 +1,5 @@
+idea 1: Dynamic Boston Crime Playlist
+
+Our idea involves pulling reported data from the Citizen application. We plan on taking reporting data from the API, grabbing reports from the last 24 hours in a 5 mile radius of the user, using keywords to determine a "danger score", and calculating the cumulative danger value of reports.
+We then use the Spotify API to assign intensity values to spotify tag, assign intensity values to songs by cumulative values of tags. We then assign a "range" that a song occupies (i.e. song with an intensity value of 15 could occupy the range(13, 17)). We make playlists for each danger level and send playlists with appropriately corresponding to users.
+We then compile dynamic playlists with danger values calculated from our use of the Citizen API. Songs with intensity ranger that include danger values have a chance to be added to the playlist. Each playlist has a cap of 25 songs.
