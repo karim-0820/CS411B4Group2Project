@@ -1,4 +1,4 @@
 Idea 2: Temperature vs Crime Tracker
 
 Grab forecast data from National Weather Service API, grab live flight statuses from aviationstack, calculate percentge of flights with given weather 
-being delayed or being cancelled. User inputs airport location and flight date/time, program returns the chances of the user's flight beind delayed or cancelled.
+being delayed or being cancelled. User inputs airport location and flight date/time, program returns the chances of the user's flight being delayed or cancelled.
