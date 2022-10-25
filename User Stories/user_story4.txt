@@ -1,0 +1,5 @@
+user story 4 - losing
+
+After logging in to the application, starting the game, and making 3 incorrect guesses in a given round (user_story5.txt). The interactive map will show a line from the closest
+country guessed to the actual country of origin. The round scory will be desplayed, the game score will be recomputed and displayed.
+The streak will be displayed. If the current game streak is a new record streak, the database will be updated with that streak value.
