@@ -1,0 +1,3 @@
+User Story 1 - Login
+User can log in with their google account. Each account will keep track of user's current streak and best streak.
+This will be used for a scoreboard that will be available in the site with the 'Scoreboard' tab.
