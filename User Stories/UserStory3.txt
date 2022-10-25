@@ -1,0 +1,2 @@
+User Story 3 - Leaderboard
+After each session the users highest score will be stored in the database and given a rank. User can click on the leaderboard tab to view the leaderboard scores. Each user is ranked based on their score compared to other users. A users highest streak is stored for the leaderboard. 
