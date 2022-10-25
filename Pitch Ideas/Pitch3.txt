@@ -1,0 +1,5 @@
+We will be creating a sort of "art geoguesser" in which a user is prompted with a piece of art and must guess on a map where that art came from. We are using two API's
+to do this. Firstly, the MET offers an API that gives access images and country-of-origin values of various artworks, which is where we will get the prompt and the 
+correct answer. Secondly, we will use the JavaScript library Leaflet to give the user an interactive map on which they can guess the art's location of origin. Their
+guess, in the form of latitude and longitude coordinates are then sent to the Google Maps API which will return the country that contains those coordinates. Users will
+be rewarded for correct answers with scores attached to accounts they can create.
