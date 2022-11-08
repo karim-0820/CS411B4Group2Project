@@ -1,0 +1,13 @@
+<script src="jquery-3.6.0.min.js"></script>
+<script>
+    var backend_url = 'http://127.0.0.1:31337'
+    var image_url = ''
+    $.ajax({
+        url: backend_url,
+        type: 'GET',
+        dataType: 'json',
+        success: function(res) {
+            <img id = 'art' src= {image_url} alt=''/>
+        }
+    })
+</script>
