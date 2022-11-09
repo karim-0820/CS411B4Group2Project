@@ -1,13 +1,42 @@
 <script src="jquery-3.6.0.min.js"></script>
+
 <script>
-    var backend_url = 'http://127.0.0.1:31337'
-    var image_url = ''
+    var backend_url = 'local port'
+    var image_url
     $.ajax({
         url: backend_url,
+        data: {
+            request: "new_image" 
+        },
         type: 'GET',
-        dataType: 'json',
+        dataType: 'string',
         success: function(res) {
-            <img id = 'art' src= {image_url} alt=''/>
+            image_url = res
+        }
+    })
+</script>
+
+<img src=image_url/>
+
+<form action="backend_url" method="POST">
+    <div>
+        <input type="text" name="country_guess" value=""/>
+    </div>
+<input type="submit" name="submit" value="Click to submit!"/>
+</form>
+
+<script>
+    var backend_url = 'local port'
+    var image_url
+    $.ajax({
+        url: backend_url,
+        data: {
+            guess: 
+        },
+        type: 'PUSH',
+        dataType: 'string',
+        success: function(res) {
+            image_url = res
         }
     })
 </script>
