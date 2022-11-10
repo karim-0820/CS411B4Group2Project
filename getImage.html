@@ -1,42 +1,46 @@
 <script src="jquery-3.6.0.min.js"></script>
 
 <script>
+    window.onload = function() {
     var backend_url = 'local port'
     var image_url
     $.ajax({
         url: backend_url,
         data: {
-            request: "new_image" 
+            request: "new_game" 
         },
         type: 'GET',
-        dataType: 'string',
+        dataType: 'json',
         success: function(res) {
-            image_url = res
+            new_game = JSON.parse(res);
+            image_url = new_game.image
+            answer = new_game.solution
+        },
+        error: function() {
+            console.log("Error in new_game request")
         }
     })
+    var input = prompt("Which country did this piece of art originate from?");
+    if (input == answer) {
+        alert("Correct!")
+    } else {
+        alert("Incorrect!")
+    }
+};
+
 </script>
 
+
+
+
+<!--
 <img src=image_url/>
 
 <form action="backend_url" method="POST">
     <div>
-        <input type="text" name="country_guess" value=""/>
+        <label for="guess"> Type your guess:</label><br>
+        <input type="text" id="guess" name="guess"/>
     </div>
 <input type="submit" name="submit" value="Click to submit!"/>
 </form>
-
-<script>
-    var backend_url = 'local port'
-    var image_url
-    $.ajax({
-        url: backend_url,
-        data: {
-            guess: 
-        },
-        type: 'PUSH',
-        dataType: 'string',
-        success: function(res) {
-            image_url = res
-        }
-    })
-</script>
+-->
