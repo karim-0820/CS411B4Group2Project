@@ -1,13 +1,88 @@
 <script src="jquery-3.6.0.min.js"></script>
+
+<html lang="en">
+    <head>
+        <style>
+            #art {
+                display: block
+            }
+        </style>
+    </head>
+    <body>
+        <div>
+            <img src="" alt="art image" id="art"/>
+        </div>
+        <button type="button" onclick="get_guess()" id="button">Click here to guess!</button>
+        <p id="result"></p>
+    </body> 
+</html>
+
 <script>
-    var backend_url = 'http://127.0.0.1:31337'
-    var image_url = ''
-    $.ajax({
-        url: backend_url,
-        type: 'GET',
-        dataType: 'json',
-        success: function(res) {
-            <img id = 'art' src= {image_url} alt=''/>
-        }
-    })
+    var backend_url = 'local port'
+    var image_url = "https://media0.giphy.com/media/l1K9Dcy7ww0CW3JHq/giphy.gif"
+    var answer = "Null"
+    function get_game() {
+        /*
+        $.ajax({
+            url: backend_url,
+            data: {
+                request: "new_game" 
+            },
+            type: 'GET',
+            dataType: 'json',
+            success: function(res) {
+                new_game = JSON.parse(res);
+                image_url = new_game.image
+                answer = new_game.solution
+            },
+            error: function() {
+                console.log("Error in new_game request")
+            }
+        })
+        */
+    }   
+
+    function start() {
+        document.getElementById("art").src = "https://media0.giphy.com/media/l1K9Dcy7ww0CW3JHq/giphy.gif";
+    }
+
+    function get_guess() {
+        var input = prompt("Which country did this piece of art originate from?");
+        if (input == answer) {
+            document.body.style.backgroundColor = "green";
+            document.getElementById("result").innerHTML = "Correct!"
+            
+        } else {
+            document.body.style.backgroundColor = "red";
+            document.getElementById("result").innerHTML = "Incorrect!"
+        };
+    }
+
+    function show() {
+        document.getElementById('art').style.display = "block";
+    }
+    
+    get_game();
+    start();
 </script>
+
+
+
+<script>
+    
+</script>   
+
+
+
+
+<!--
+<img src=image_url/>
+
+<form action="backend_url" method="POST">
+    <div>
+        <label for="guess"> Type your guess:</label><br>
+        <input type="text" id="guess" name="guess"/>
+    </div>
+<input type="submit" name="submit" value="Click to submit!"/>
+</form>
+-->
