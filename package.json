@@ -1,0 +1,19 @@
+{
+  "name": "cs411b4group2project",
+  "version": "1.0.0",
+  "description": "server for cs411 project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/karim-0820/CS411B4Group2Project.git"
+  },
+  "author": "Michael Walsh",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/karim-0820/CS411B4Group2Project/issues"
+  },
+  "homepage": "https://github.com/karim-0820/CS411B4Group2Project#readme"
+}
