@@ -30,24 +30,15 @@
     var backend_url = 'localhost:3000'
     var image_url = "https://media0.giphy.com/media/l1K9Dcy7ww0CW3JHq/giphy.gif"
     var answer = "Algeria"
-    var http = require('https)');
     async function get_game() {
-        var xmlHttp = new XMLHttpRequest();
-        xmlHttp.open("GET", backend_url, false)
-        xmlHttp.send(null);
-        $.ajax({
-            url: backend_url,
-            type: 'GET',
-            dataType: 'string',
-            success: function(res) {
-                new_game = JSON.parse(res);
-                image_url = new_game.image
-                answer = new_game.solution
-            },
-            error: function() {
-                console.log("Error in new_game request")
-            }
-        })
+        console.log("fetchstart")
+        const response = await fetch('/');
+        console.log("midfetch")
+        const data = await response.json();
+        console.log("postfetch")
+        new_game = JSON.parse(data);
+        image_url = new_game.image;
+        answer = new_game.solution;
     }   
 
     function start() {
@@ -142,7 +133,9 @@
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAFU_P2bNacsOeQ-RQsRgyOdmnUDDxSHLA&callback=initMap">
     </script>
     <script>
+        console.log("test1");
         get_game();
+        console.log('test2');
         start();
     </script>
 </body>
