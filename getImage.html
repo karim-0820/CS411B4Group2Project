@@ -1,20 +1,25 @@
-<script src="jquery-3.6.0.min.js"></script>
+<!DOCTYPE html>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.1.3/axios.min.js"></script>
+<script src="backend.js"></script>
 
 <html lang="en">
-    <head>
-        <style>
-            #art {
-                display: block
-            }
-        </style>
-    </head>
-    <body>
-        <div>
-            <img src="" alt="art image" id="art"/>
-        </div>
-        <button type="button" onclick="get_guess()" id="button">Click here to guess!</button>
-        <p id="result"></p>
-    </body> 
+
+<head>
+    <style>
+        #art {
+            display: block
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        <img src="" alt="art image" id="art" />
+    </div>
+    <button type="button" onclick="get_guess()" id="button">Click here to guess!</button>
+    <p id="result"></p>
+</body>
+
 </html>
 
 <script>
@@ -40,7 +45,7 @@
             }
         })
         */
-    }   
+    }
 
     function start() {
         document.getElementById("art").src = "https://media0.giphy.com/media/l1K9Dcy7ww0CW3JHq/giphy.gif";
@@ -51,7 +56,7 @@
         if (input == answer) {
             document.body.style.backgroundColor = "green";
             document.getElementById("result").innerHTML = "Correct!"
-            
+
         } else {
             document.body.style.backgroundColor = "red";
             document.getElementById("result").innerHTML = "Incorrect!"
@@ -61,28 +66,7 @@
     function show() {
         document.getElementById('art').style.display = "block";
     }
-    
+
     get_game();
     start();
 </script>
-
-
-
-<script>
-    
-</script>   
-
-
-
-
-<!--
-<img src=image_url/>
-
-<form action="backend_url" method="POST">
-    <div>
-        <label for="guess"> Type your guess:</label><br>
-        <input type="text" id="guess" name="guess"/>
-    </div>
-<input type="submit" name="submit" value="Click to submit!"/>
-</form>
--->
