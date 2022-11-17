@@ -65,3 +65,72 @@
     get_game();
     start();
 </script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>My Google Map</title>
+  <style>
+    #map{
+      height:400px;
+      width:100%;
+    }
+  </style>
+</head>
+<body>
+  <h1>My Google Map</h1>
+  <div id="map"></div>
+  <script>
+    function initMap() {
+        var myLatlng = { lat: 0, lng: 0 };
+        const geocoder = new google.maps.Geocoder();
+        const map = new google.maps.Map(document.getElementById("map"), {
+            zoom: 2,
+            center: myLatlng,
+        });
+        let infoWindow = new google.maps.InfoWindow({
+            content: "Click the map to get Lat/Lng!",
+            position: myLatlng,
+        });
+
+        infoWindow.open(map);
+        map.addListener("click", (mapsMouseEvent) => {
+            // Close the current InfoWindow.
+            infoWindow.close();
+
+            // Create a new InfoWindow.
+            infoWindow = new google.maps.InfoWindow({
+             position: mapsMouseEvent.latLng,
+            });
+            
+            infoWindow.setContent(
+                
+                JSON.stringify(mapsMouseEvent.latLng.toJSON(), null, 2)
+            );
+            myLatLng = mapsMouseEvent.latLng.toJSON()
+
+            geocoder
+                .geocode({ location: myLatLng })
+                .then((response) => {
+                console.log(response)
+                
+                if (response.results[response.results.length - 1]) {
+                    infoWindow.setContent(response.results[response.results.length - 1].formatted_address);
+                } else {
+                    window.alert("No results found");
+                }
+                })
+                .catch((e) => window.alert("Geocoder failed due to: " + e));
+            infoWindow.open(map);
+        });
+    }
+    window.initMap = initMap;
+
+  </script>
+  <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAFU_P2bNacsOeQ-RQsRgyOdmnUDDxSHLA&callback=initMap">
+    </script>
+</body>
+</html>
