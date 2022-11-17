@@ -5,7 +5,7 @@
         <style>
             #art {
                 display: block;
-                height:300px;
+                height:375px;
                 margin:auto;
             }
         </style>
@@ -62,11 +62,9 @@
     function check_guess(guess) {
         if (guess == answer) {
             document.body.style.backgroundColor = "green";
-            document.getElementById("result").innerHTML = "Correct!"
             
         } else {
             document.body.style.backgroundColor = "red";
-            document.getElementById("result").innerHTML = "Incorrect!"
         };
     }
 
@@ -85,13 +83,13 @@
   <style>
     #map{
       height:300px;
-      width:100%;
+      width:70%;
       margin:auto;
     }
   </style>
 </head>
 <body>
-  <h1>Select which country you think this art came from:</h1>
+  <!-- <h1>Select which country you think this art came from:</h1> -->
   <div id="map"></div>
   <script>
     function initMap() {
