@@ -31,12 +31,12 @@
     var image_url = "https://media0.giphy.com/media/l1K9Dcy7ww0CW3JHq/giphy.gif"
     var answer = "Algeria"
     var http = require('https)');
-    function get_game() {
+    async function get_game() {
+        var xmlHttp = new XMLHttpRequest();
+        xmlHttp.open("GET", backend_url, false)
+        xmlHttp.send(null);
         $.ajax({
             url: backend_url,
-            data: {
-                request: "new_game" 
-            },
             type: 'GET',
             dataType: 'string',
             success: function(res) {
