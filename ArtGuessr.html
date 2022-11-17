@@ -4,7 +4,9 @@
     <head>
         <style>
             #art {
-                display: block
+                display: block;
+                height:300px;
+                margin:auto;
             }
         </style>
     </head>
@@ -82,8 +84,9 @@
   <title>Input Map</title>
   <style>
     #map{
-      height:400px;
+      height:300px;
       width:100%;
+      margin:auto;
     }
   </style>
 </head>
@@ -99,7 +102,7 @@
             center: myLatlng,
         });
         let infoWindow = new google.maps.InfoWindow({
-            content: "Click the map to get Lat/Lng!",
+            content: "Click a country to submit a guess!",
             position: myLatlng,
         });
 
