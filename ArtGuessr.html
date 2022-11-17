@@ -30,15 +30,15 @@
     var backend_url = 'localhost:3000'
     var image_url = "https://media0.giphy.com/media/l1K9Dcy7ww0CW3JHq/giphy.gif"
     var answer = "Algeria"
+    var http = require('https)');
     function get_game() {
-        /*
         $.ajax({
             url: backend_url,
             data: {
                 request: "new_game" 
             },
             type: 'GET',
-            dataType: 'json',
+            dataType: 'string',
             success: function(res) {
                 new_game = JSON.parse(res);
                 image_url = new_game.image
@@ -48,13 +48,11 @@
                 console.log("Error in new_game request")
             }
         })
-        */
     }   
 
     function start() {
-        var new_art_index = Math.floor(Math.random()*image_array.length);
-        var new_art_image = image_array[new_art_index];
-        var new_art_answer = answer_array[new_art_index];
+        var new_art_image = new_game.image;
+        var new_art_answer = new_game.solution;
         document.getElementById("art").src = new_art_image;
         answer = new_art_answer;
     }

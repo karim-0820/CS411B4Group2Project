@@ -2,7 +2,6 @@ const express = require("express");
 
 const bknd = express();
 
-/*
 const API_URL = 'https://collectionapi.metmuseum.org/public/collection/v1/objects/';
 
 var total = 482855;
@@ -19,8 +18,6 @@ axios.get(object_data)
     .then(response => {
         console.log(response.data);
     })
-
-*/
 
 bknd.get("/", function (req, res) {
   res.sendFile(__dirname + "/Artguessr.html");
