@@ -4,7 +4,9 @@
     <head>
         <style>
             #art {
-                display: block
+                display: block;
+                height:325px;
+                margin:auto;
             }
         </style>
     </head>
@@ -16,7 +18,7 @@
             <!--
             <button type="button" onclick="get_guess()" id="button">Click here to guess!</button>
             -->
-            <p id="result"></p>            
+            <p id="result">Click on the map to guess an artwork's origin!</p>            
         </div>
         
     </body> 
@@ -25,34 +27,20 @@
 <script>
     var image_array = Array("https://images.metmuseum.org/CRDImages/ad/web-large/DP263972.jpg", "https://images.metmuseum.org/CRDImages/ad/web-large/123916.jpg", "https://images.metmuseum.org/CRDImages/ad/web-large/DP248061.jpg")
     var answer_array = Array("United States", "United States", "France")
-    var backend_url = 'local port'
-    var image_url = ""
+    var backend_url = 'http:localhost:3000'
+    var image_url = "https://media0.giphy.com/media/l1K9Dcy7ww0CW3JHq/giphy.gif"
     var answer = "Algeria"
-    function get_game() {
-        /*
-        $.ajax({
-            url: backend_url,
-            data: {
-                request: "new_game" 
-            },
-            type: 'GET',
-            dataType: 'json',
-            success: function(res) {
-                new_game = JSON.parse(res);
-                image_url = new_game.image
-                answer = new_game.solution
-            },
-            error: function() {
-                console.log("Error in new_game request")
-            }
-        })
-        */
-    }   
-
-    function start() {
-        var new_art_index = Math.floor(Math.random()*image_array.length);
-        var new_art_image = image_array[new_art_index];
-        var new_art_answer = answer_array[new_art_index];
+    async function get_game() {
+        console.log("fetchstart")
+        const response = await fetch(backend_url);
+        console.log("midfetch")
+        const data = await response.json();
+        console.log("postfetch")
+        new_game = data;
+        image_url = new_game.image;
+        answer = new_game.solution;
+        var new_art_image = new_game.image;
+        var new_art_answer = new_game.solution;
         document.getElementById("art").src = new_art_image;
         answer = new_art_answer;
     }
@@ -64,7 +52,7 @@
             
         } else {
             document.body.style.backgroundColor = "red";
-            document.getElementById("result").innerHTML = "Incorrect!"
+            document.getElementById("result").innerHTML = "Inorrect! The correct answer was ".concat(answer);
         };
     }
 
@@ -72,6 +60,7 @@
         document.getElementById('art').style.display = "block";
     }
 </script>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -81,13 +70,14 @@
   <title>Input Map</title>
   <style>
     #map{
-      height:400px;
-      width:100%;
+      height:280px;
+      width:70%;
+      margin:auto;
     }
   </style>
 </head>
 <body>
-  <h1>Select which country you think this art came from:</h1>
+  <!-- <h1>Select which country you think this art came from:</h1> -->
   <div id="map"></div>
   <script>
     function initMap() {
@@ -98,7 +88,7 @@
             center: myLatlng,
         });
         let infoWindow = new google.maps.InfoWindow({
-            content: "Click the map to get Lat/Lng!",
+            content: "Click a country to submit a guess!",
             position: myLatlng,
         });
 
@@ -142,8 +132,9 @@
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAFU_P2bNacsOeQ-RQsRgyOdmnUDDxSHLA&callback=initMap">
     </script>
     <script>
+        console.log("test1");
         get_game();
-        start();
+        console.log('test2');
     </script>
 </body>
 </html>
