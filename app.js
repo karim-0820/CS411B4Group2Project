@@ -1,3 +1,4 @@
+// Calling all the required libraries and modules
 const express = require("express");
 
 const axios = require('axios');
@@ -11,47 +12,52 @@ app.use(cors({
   origin: '*'
 }));
 
-
 const { response } = require("express");
 
+
+// Code for generating links to random objects in the MET API
 const API_URL = 'https://collectionapi.metmuseum.org/public/collection/v1/objects/';
 
-var total = 512;
-
-function getRandomObjectID() {
-    return Math.floor(Math.random() * total);
-}
+var total = 1024; // working with a smaller library until auto-looping is up and running
 
 function getRandomObjectURL() {
-    return API_URL.concat(getRandomObjectID().toString());
-} 
+    return API_URL.concat((Math.floor(Math.random() * total)).toString());
+}
 
-var data;
-
+// Code for receiving get requests from frontend, making calls to API, and passing on valid info back to frontend 
 app.get("/", function (req, res) {
+  // Initializations for variables used in making and responding to requests
   var publicDomain;
   var solution;
   var imageURL;
+  var data;
+
+  // GET request to MET and response to frontend
   do {
-    console.log("Beginning get request to MET!");
     axios.get(getRandomObjectURL())
     .then(response => {
+
+        // Storing useful data
         data = response.data;
-        console.log(data);
         imageURL = data.primaryImageSmall;
         solution = data.country;
         publicDomain = data.isPublicDomain;
+
+        // If valid object, send data to frontend. Else, retry
         if (publicDomain == true && solution != "") {
-          res.send({"image":imageURL, "solution":solution, "objectID":response.data.objectID, "isPublicDomain":publicDomain});
+          var package = {"image":imageURL, "solution":solution}
+          res.send(package);
+          console.log("Valid artwork requested, sent the following:");
+          console.log(package);
         } else {
-          console.log("invalid artwork, try again");
-          console.log((publicDomain == false || solution == "").toString())
+          console.log("Invalid artwork, please try again.");
         }                
     })
+
+    // Error catching, mostly for calling invalid object ID's
     .catch(error => {
-      console.log("Invalid MET Requset, try again");
+      console.log("Invalid MET Requset, please try again.");
     });
-    console.log("End of do-while loop")
   } while (publicDomain == false || solution == "");
 });
 

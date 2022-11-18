@@ -5,7 +5,7 @@
         <style>
             #art {
                 display: block;
-                height:375px;
+                height:325px;
                 margin:auto;
             }
         </style>
@@ -18,7 +18,7 @@
             <!--
             <button type="button" onclick="get_guess()" id="button">Click here to guess!</button>
             -->
-            <p id="result"></p>            
+            <p id="result">Click on the map to guess an artwork's origin!</p>            
         </div>
         
     </body> 
@@ -48,9 +48,11 @@
     function check_guess(guess) {
         if (guess == answer) {
             document.body.style.backgroundColor = "green";
+            document.getElementById("result").innerHTML = "Correct!"
             
         } else {
             document.body.style.backgroundColor = "red";
+            document.getElementById("result").innerHTML = "Inorrect! The correct answer was ".concat(answer);
         };
     }
 
@@ -68,7 +70,7 @@
   <title>Input Map</title>
   <style>
     #map{
-      height:300px;
+      height:280px;
       width:70%;
       margin:auto;
     }
