@@ -28,16 +28,6 @@ function getRandomObjectURL() {
 
 var data;
 
-// make a variable for the isPublicDomain property
-// var isPublicDomain = response.data.isPublicDomain;
-
-// if is publicDomain is false, then get a new random object
-/*
-while (isPublicDomain == false) {
-    getRandomObject(total);
-}
-*/
-
 app.get("/", function (req, res) {
   var publicDomain;
   var solution;
