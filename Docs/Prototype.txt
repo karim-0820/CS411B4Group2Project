@@ -1,0 +1,4 @@
+The two technology stacks we're using is Node.js and MongoDB. We chose Node.js as we had basic understanding of javascript
+and thought it wouldn't be too big of a leap to learn properly. Node.js is also very popular and lots of resources are
+available for it such as packages and tutorials. We also chose MongoDB as it seemed very beginner friendly as we already knew
+how JSON formatting worked and the data that we got from the API is in JSON form, where we could easily insert it into our database.
