@@ -47,6 +47,9 @@ app.get("/", function (req, res) {
           console.log("invalid artwork, try again");
           console.log((publicDomain == false || solution == "").toString())
         }                
+    })
+    .catch(error => {
+      console.log("Invalid MET Requset, try again");
     });
     console.log("End of do-while loop")
   } while (publicDomain == false || solution == "");
