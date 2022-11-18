@@ -62,10 +62,6 @@ app.get("/", function (req, res) {
   } while (publicDomain == false || solution == "");
 });
 
-app.get("/", function (req, res) {
-  res.send({"image":"https://images.metmuseum.org/CRDImages/ad/web-large/DP263972.jpg", "solution":"United States"});
-});
-
 app.listen(3000, function () {
   console.log("Server is listening on localhost:3000");
 });
