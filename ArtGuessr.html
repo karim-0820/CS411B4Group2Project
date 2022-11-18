@@ -27,21 +27,18 @@
 <script>
     var image_array = Array("https://images.metmuseum.org/CRDImages/ad/web-large/DP263972.jpg", "https://images.metmuseum.org/CRDImages/ad/web-large/123916.jpg", "https://images.metmuseum.org/CRDImages/ad/web-large/DP248061.jpg")
     var answer_array = Array("United States", "United States", "France")
-    var backend_url = 'localhost:3000'
+    var backend_url = 'http:localhost:3000'
     var image_url = "https://media0.giphy.com/media/l1K9Dcy7ww0CW3JHq/giphy.gif"
     var answer = "Algeria"
     async function get_game() {
         console.log("fetchstart")
-        const response = await fetch('/');
+        const response = await fetch(backend_url);
         console.log("midfetch")
         const data = await response.json();
         console.log("postfetch")
-        new_game = JSON.parse(data);
+        new_game = data;
         image_url = new_game.image;
         answer = new_game.solution;
-    }   
-
-    function start() {
         var new_art_image = new_game.image;
         var new_art_answer = new_game.solution;
         document.getElementById("art").src = new_art_image;
@@ -136,7 +133,6 @@
         console.log("test1");
         get_game();
         console.log('test2');
-        start();
     </script>
 </body>
 </html>

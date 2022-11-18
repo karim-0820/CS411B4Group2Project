@@ -7,22 +7,24 @@ const { appendFile } = require("fs");
 const app = express();
 
 const cors = require('cors');
-const { response } = require("express");
 app.use(cors({
   origin: '*'
 }));
 
+
+const { response } = require("express");
+
 const API_URL = 'https://collectionapi.metmuseum.org/public/collection/v1/objects/';
 
-var total = 482855;
+var total = 512;
 
-function getRandomObject(max) {
-    return Math.floor(Math.random() * max);
+function getRandomObjectID() {
+    return Math.floor(Math.random() * total);
 }
 
-var random_object = getRandomObject(total).toString();
-
-var object_data = API_URL.concat(random_object);
+function getRandomObjectURL() {
+    return API_URL.concat(getRandomObjectID().toString());
+} 
 
 var data;
 
@@ -36,17 +38,32 @@ while (isPublicDomain == false) {
 }
 */
 
-
 app.get("/", function (req, res) {
-  axios.get('https://collectionapi.metmuseum.org/public/collection/v1/objects/234')
+  var publicDomain;
+  var solution;
+  var imageURL;
+  do {
+    console.log("Beginning get request to MET!");
+    axios.get(getRandomObjectURL())
     .then(response => {
         data = response.data;
         console.log(data);
-        var imageURL = data.primaryImageSmall;
-        var solution = data.country;
-        res.send({"image":imageURL, "solution":solution, "ispublicdomain":response.data.objectID});
-    })
-  
+        imageURL = data.primaryImageSmall;
+        solution = data.country;
+        publicDomain = data.isPublicDomain;
+        if (publicDomain == true && solution != "") {
+          res.send({"image":imageURL, "solution":solution, "objectID":response.data.objectID, "isPublicDomain":publicDomain});
+        } else {
+          console.log("invalid artwork, try again");
+          console.log((publicDomain == false || solution == "").toString())
+        }                
+    });
+    console.log("End of do-while loop")
+  } while (publicDomain == false || solution == "");
+});
+
+app.get("/", function (req, res) {
+  res.send({"image":"https://images.metmuseum.org/CRDImages/ad/web-large/DP263972.jpg", "solution":"United States"});
 });
 
 app.listen(3000, function () {
