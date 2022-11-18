@@ -1,9 +1,16 @@
 const express = require("express");
-const axios = require("axios");
+
+const axios = require('axios');
+
 const { appendFile } = require("fs");
-const {response} = require("express");
 
 const app = express();
+
+const cors = require('cors');
+const { response } = require("express");
+app.use(cors({
+  origin: '*'
+}));
 
 const API_URL = 'https://collectionapi.metmuseum.org/public/collection/v1/objects/';
 
@@ -17,25 +24,31 @@ var random_object = getRandomObject(total).toString();
 
 var object_data = API_URL.concat(random_object);
 
-axios.get(object_data)
-    .then(response => {
-        console.log(response.data);
-    })
+var data;
 
 // make a variable for the isPublicDomain property
-var isPublicDomain = response.data.isPublicDomain;
+// var isPublicDomain = response.data.isPublicDomain;
 
 // if is publicDomain is false, then get a new random object
+/*
 while (isPublicDomain == false) {
     getRandomObject(total);
 }
+*/
 
 
 app.get("/", function (req, res) {
-  res.send({"image":"https://images.metmuseum.org/CRDImages/ad/web-large/DP263972.jpg", "solution":"United States"});
+  axios.get('https://collectionapi.metmuseum.org/public/collection/v1/objects/234')
+    .then(response => {
+        data = response.data;
+        console.log(data);
+        var imageURL = data.primaryImageSmall;
+        var solution = data.country;
+        res.send({"image":imageURL, "solution":solution, "ispublicdomain":response.data.objectID});
+    })
+  
 });
 
 app.listen(3000, function () {
   console.log("Server is listening on localhost:3000");
 });
-
