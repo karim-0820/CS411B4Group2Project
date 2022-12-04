@@ -15,7 +15,6 @@ app.use(cors({
 const { response } = require("express");
 const { get } = require("http");
 
-
 // Code for generating links to random objects in the MET API
 const API_URL = 'https://collectionapi.metmuseum.org/public/collection/v1/objects/';
 
@@ -25,6 +24,63 @@ function getRandomObjectURL() {
     return API_URL.concat((Math.floor(Math.random() * total)).toString());
 }
 
+/* Define for a library of values used for game balance. 
+  A value indicates a weight on a country's likelihood of being selected. 
+  All values must be between 0 and 1 (inclusive). Default value is 1.
+  Accompanying function is for processing weights.
+*/
+
+var Balance = {
+  "United States": 0.05,
+  "Japan": 0.25
+}; 
+
+function reroll(country) {
+  var weight = Balance[country];
+  var die = (1 / weight) - 1;
+  var roll = Math.floor((Math.random() * die))
+  if (roll == 0) {
+    return false;
+  } else {
+    return true;
+  }
+};
+
+// Function for checking if a solution is actually usable for the game
+function isCountry(country) {
+  country = country.toLowerCase();
+  if (country.includes("probably") || country.includes(" or ") || country.includes("maybe") || country == "" || country.includes("possibly")) {
+    return false;
+  } else {
+    return true;
+  }
+}
+
+// Function and array for fixing common disconnects between MET and geocoding data
+var needReassignment = [
+  "England",
+  "Scotland",
+  "Ottoman Empire",
+  "North India",
+  "South India",
+  "Tibet"
+]
+
+function reassignCountry(country) {
+  if (country == "England" || country == "Scotland") {
+    return "United Kingdom";
+  } else if (country == "Ottoman Empire") {
+    return "Turkey";
+  } else if (country == "North India" || country == "South India") {
+    return "India";
+  } else if (country == "Tibet") {
+    return "China";
+  } else {
+    return country;
+  }
+}
+
+
 function getArt(res) {
   // Initializations for variables used in making and responding to requests
   var publicDomain;
@@ -32,9 +88,7 @@ function getArt(res) {
   var imageURL;
   var data;
 
-  // GET request to MET and response to frontend
-
-  
+  // GET request to MET and response to frontend  
   do {
     axios.get(getRandomObjectURL())
     .then(response => {
@@ -45,15 +99,34 @@ function getArt(res) {
         solution = data.country;
         publicDomain = data.isPublicDomain;
 
+        if (needReassignment.includes(solution)) {
+          solution = reassignCountry(solution);
+        }
+
         // If valid object, send data to frontend. Else, retry
-        if (publicDomain == true && solution != "") {
-          var package = {"image":imageURL, "solution":solution}
+        if (publicDomain == false || isCountry(solution) == false) {
+          // Failure, retry
+          console.log("Invalid artwork, retrying.");
+          getArt(res);
+        } else if (solution in Balance) {
+          // Has a chance to reroll a valid artwork based on weights defined in Balance
+          if (reroll(solution)) {
+            console.log("Rerolling");
+            getArt(res);
+          } else {
+            console.log("Winner, winner!")
+            // Success via reroll
+            var package = {"image":imageURL, "solution":solution};
+            res.send(package);
+            console.log("Valid artwork requested, sent the following:");
+            console.log(package);
+          }
+        } else {
+          // Success
+          var package = {"image":imageURL, "solution":solution};
           res.send(package);
           console.log("Valid artwork requested, sent the following:");
           console.log(package);
-        } else {
-          console.log("Invalid artwork, retrying.");
-          getArt(res);
         }                
     })
 
