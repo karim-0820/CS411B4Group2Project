@@ -1,11 +1,13 @@
-// Calling all the required libraries and modules
+// Calling all the required libraries and modules, express config 
 const express = require("express");
+const app = express();
+const bodyParser = require("body-parser");
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 const axios = require('axios');
 
 const { appendFile } = require("fs");
-
-const app = express();
 
 const cors = require('cors');
 app.use(cors({
@@ -31,8 +33,9 @@ function getRandomObjectURL() {
 */
 
 var Balance = {
-  "United States": 0.05,
-  "Japan": 0.25
+  "United States": 0.1,
+  "Japan": 0.25,
+  "France": 0.9
 }; 
 
 function reroll(country) {
@@ -81,7 +84,7 @@ function reassignCountry(country) {
 }
 
 
-function getArt(res) {
+function getArt(req, res) {
   // Initializations for variables used in making and responding to requests
   var publicDomain;
   var solution;
@@ -107,12 +110,12 @@ function getArt(res) {
         if (publicDomain == false || isCountry(solution) == false) {
           // Failure, retry
           console.log("Invalid artwork, retrying.");
-          getArt(res);
+          getArt(req, res);
         } else if (solution in Balance) {
           // Has a chance to reroll a valid artwork based on weights defined in Balance
           if (reroll(solution)) {
             console.log("Rerolling");
-            getArt(res);
+            getArt(req, res);
           } else {
             console.log("Winner, winner!")
             // Success via reroll
@@ -120,6 +123,7 @@ function getArt(res) {
             res.send(package);
             console.log("Valid artwork requested, sent the following:");
             console.log(package);
+            console.log(req.body.username);
           }
         } else {
           // Success
@@ -127,20 +131,21 @@ function getArt(res) {
           res.send(package);
           console.log("Valid artwork requested, sent the following:");
           console.log(package);
+          console.log(req.body.username);
         }                
     })
 
     // Error catching, mostly for calling invalid object ID's
     .catch(error => {
       console.log("Invalid MET Request, retrying.");
-      getArt(res);
+      getArt(req, res);
     });
   } while (publicDomain == false || solution == "");
 }
 
 // Code for receiving get requests from frontend, making calls to API, and passing on valid info back to frontend 
-app.get("/", function (req, res) {
-  getArt(res);
+app.post("/", function (req, res) {
+  getArt(req, res);
 });
 
 app.listen(3000, function () {
