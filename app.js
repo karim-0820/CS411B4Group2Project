@@ -17,53 +17,6 @@ app.use(cors({
 const { response } = require("express");
 const { get } = require("http");
 
-// MongoDB Setup
-/*
-const { MongoClient } = require('mongodb');
-const { mainModule } = require("process");
-
-async function listDB(client) {
-  databasesList = await client.db().admin().listDatabases();
-
-  console.log("Databases are as follow:");
-  databasesList.databases.forEach(db => console.log(` - ${db.name}`));
-}
-
-async function mongoMain() {
-  
-  // MongoDB collection URI
-  const URI = "mongodb+srv://MichaelW:kjDVUq5Qd2QbD3Z@cluster0.xxkt1rl.mongodb.net/sample_airbnb?retryWrites=true&w=majority";
-  const client = new MongoClient(URI);
-  try {
-    // Connect to the MongoDB Cluster
-    await client.connect();
-
-    await createEntry(client,
-      {
-        _id: "testID",
-        name: "Lovely Loft",
-        summary: "A charming loft in Paris",
-        bedrooms: 1,
-        bathrooms: 1
-      }
-    );
-    await listDB(client);
-  } catch (errorText) {
-    console.error(errorText);
-  } finally {
-    await client.close();
-  }
-}
-
-mongoMain().catch(console.error);
-
-async function createEntry(client, newEntry) {
-  const result = await client.db("sample_airbnb").collection("listingsAndReviews").insertOne(newEntry);
-  console.log(`New entry created with the following ID: ${result.insertedID}`);
-}
-*/
-// -------------
-
 // Code for generating links to random objects in the MET API
 const API_URL = 'https://collectionapi.metmuseum.org/public/collection/v1/objects/';
 
