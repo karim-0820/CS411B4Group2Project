@@ -8,25 +8,23 @@
                 display: block;
                 height:325px;
                 margin:auto;
+                border: 5px solid #555;
             }
         </style>
     </head>
-    <body>
-        <script src="https://accounts.google.com/gsi/client" async defer></script>
-        <div id="g_id_onload"
-           data-client_id="366251396459-lct0pio32fspmch991hou44tf3mj9qe0.apps.googleusercontent.com"
-           data-login_uri="https://your.domain/your_login_endpoint"
-           data-auto_prompt="false">
+    <div class='wrapper'>
+        <form id='usernameInput'>
+        <div>
+            <label id='usernameFormLabel' for='usernameField'>Input a Username:</label>
+            <input id='usernameField' type='text'></input>
         </div>
-        <div class="g_id_signin"
-           data-type="standard"
-           data-size="large"
-           data-theme="outline"
-           data-text="sign_in_with"
-           data-shape="rectangular"
-           data-logo_alignment="left">
+        <div class='form-sub'>
+            <button id='usernameSubmit' type='button'>Click here to start a new round!</button>
         </div>
-    </body>
+        </form>        
+        <div>
+            <p id='result'></p></div>
+        </div>
     <body>
         <div>
             <img src="" alt="art image" id="art"/>
@@ -47,8 +45,30 @@
     var backend_url = 'http:localhost:3000'
     var image_url = "https://media0.giphy.com/media/l1K9Dcy7ww0CW3JHq/giphy.gif"
     var answer = "Algeria"
-    async function get_game() {
-        const response = await fetch(backend_url);
+
+    function startGame() {
+        var nameField = document.getElementById('usernameField').value;
+        var result = document.getElementById('result');
+        document.body.style.backgroundColor = "white";
+        document.getElementById("result").innerHTML = ""
+        if (nameField.length < 2) {
+            document.getElementById("result").innerHTML = "Username must be at least 2 characters."
+        } else {
+            document.getElementById("result").innerHTML = "Loading new art, this may take a while..."
+            get_game(nameField);
+            return nameField;
+        }
+    }
+
+    var subButton = document.getElementById('usernameSubmit');
+    subButton.addEventListener('click', startGame, false);
+
+    async function get_game(user) {
+        const response = await fetch(backend_url, {
+            method: "post",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({username: user})
+        });
         const data = await response.json();
         new_game = data;
         image_url = new_game.image;
@@ -57,6 +77,7 @@
         var new_art_answer = new_game.solution;
         document.getElementById("art").src = new_art_image;
         answer = new_art_answer;
+        document.getElementById("result").innerHTML = ""
     }
 
     function check_guess(guess) {
@@ -66,13 +87,14 @@
             
         } else {
             document.body.style.backgroundColor = "red";
-            document.getElementById("result").innerHTML = "Inorrect! The correct answer was ".concat(answer);
+            document.getElementById("result").innerHTML = "Incorrect! The correct answer was ".concat(answer);
         };
     }
 
     function show() {
         document.getElementById('art').style.display = "block";
     }
+    
 </script>
 
 <!DOCTYPE html>
@@ -81,7 +103,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Input Map</title>
+  <title>ArtGuessr</title>
   <style>
     #map{
       height:280px;
@@ -147,7 +169,6 @@
     </script>
     <script>
         console.log("test1");
-        get_game();
         console.log('test2');
     </script>
 </body>

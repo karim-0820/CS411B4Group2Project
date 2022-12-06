@@ -1,11 +1,13 @@
-// Calling all the required libraries and modules
+// Calling all the required libraries and modules, express config 
 const express = require("express");
+const app = express();
+const bodyParser = require("body-parser");
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 const axios = require('axios');
 
 const { appendFile } = require("fs");
-
-const app = express();
 
 const cors = require('cors');
 app.use(cors({
@@ -14,6 +16,53 @@ app.use(cors({
 
 const { response } = require("express");
 const { get } = require("http");
+
+// MongoDB Setup
+/*
+const { MongoClient } = require('mongodb');
+const { mainModule } = require("process");
+
+async function listDB(client) {
+  databasesList = await client.db().admin().listDatabases();
+
+  console.log("Databases are as follow:");
+  databasesList.databases.forEach(db => console.log(` - ${db.name}`));
+}
+
+async function mongoMain() {
+  
+  // MongoDB collection URI
+  const URI = "mongodb+srv://MichaelW:kjDVUq5Qd2QbD3Z@cluster0.xxkt1rl.mongodb.net/sample_airbnb?retryWrites=true&w=majority";
+  const client = new MongoClient(URI);
+  try {
+    // Connect to the MongoDB Cluster
+    await client.connect();
+
+    await createEntry(client,
+      {
+        _id: "testID",
+        name: "Lovely Loft",
+        summary: "A charming loft in Paris",
+        bedrooms: 1,
+        bathrooms: 1
+      }
+    );
+    await listDB(client);
+  } catch (errorText) {
+    console.error(errorText);
+  } finally {
+    await client.close();
+  }
+}
+
+mongoMain().catch(console.error);
+
+async function createEntry(client, newEntry) {
+  const result = await client.db("sample_airbnb").collection("listingsAndReviews").insertOne(newEntry);
+  console.log(`New entry created with the following ID: ${result.insertedID}`);
+}
+*/
+// -------------
 
 // Code for generating links to random objects in the MET API
 const API_URL = 'https://collectionapi.metmuseum.org/public/collection/v1/objects/';
@@ -31,8 +80,9 @@ function getRandomObjectURL() {
 */
 
 var Balance = {
-  "United States": 0.05,
-  "Japan": 0.25
+  "United States": 0.1,
+  "Japan": 0.25,
+  "France": 0.9
 }; 
 
 function reroll(country) {
@@ -81,7 +131,7 @@ function reassignCountry(country) {
 }
 
 
-function getArt(res) {
+function getArt(req, res) {
   // Initializations for variables used in making and responding to requests
   var publicDomain;
   var solution;
@@ -107,12 +157,12 @@ function getArt(res) {
         if (publicDomain == false || isCountry(solution) == false) {
           // Failure, retry
           console.log("Invalid artwork, retrying.");
-          getArt(res);
+          getArt(req, res);
         } else if (solution in Balance) {
           // Has a chance to reroll a valid artwork based on weights defined in Balance
           if (reroll(solution)) {
             console.log("Rerolling");
-            getArt(res);
+            getArt(req, res);
           } else {
             console.log("Winner, winner!")
             // Success via reroll
@@ -120,6 +170,7 @@ function getArt(res) {
             res.send(package);
             console.log("Valid artwork requested, sent the following:");
             console.log(package);
+            console.log(req.body.username);
           }
         } else {
           // Success
@@ -127,20 +178,21 @@ function getArt(res) {
           res.send(package);
           console.log("Valid artwork requested, sent the following:");
           console.log(package);
+          console.log(req.body.username);
         }                
     })
 
     // Error catching, mostly for calling invalid object ID's
     .catch(error => {
       console.log("Invalid MET Request, retrying.");
-      getArt(res);
+      getArt(req, res);
     });
   } while (publicDomain == false || solution == "");
 }
 
 // Code for receiving get requests from frontend, making calls to API, and passing on valid info back to frontend 
-app.get("/", function (req, res) {
-  getArt(res);
+app.post("/", function (req, res) {
+  getArt(req, res);
 });
 
 app.listen(3000, function () {
