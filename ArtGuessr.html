@@ -1,0 +1,230 @@
+<script src="jquery-3.6.0.min.js"></script>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>
+            ArtGuessr
+        </title>
+        <style>
+            img {
+                display: inline-block;
+                margin-left: auto;
+<<<<<<< HEAD
+                height: 100%;
+=======
+                height: 400px;
+>>>>>>> 8704a4e8d83620e50984d62cb87a22db3eaabfd6
+                max-width: 50%;
+                border: 5px solid #555;
+            }
+            h1 {
+<<<<<<< HEAD
+                font-size: 6vh;
+=======
+                font-size: 48;
+>>>>>>> 8704a4e8d83620e50984d62cb87a22db3eaabfd6
+                text-align: center;
+                color: "black";
+                font-weight: bold;
+                font-family: 'Trebuchet MS', sans-serif;
+            }
+            p {
+                font-size: 16;
+                margin-top: 20px;
+                margin-bottom: 20px;
+                font-family: 'Trebuchet MS', sans-serif;
+            }
+            input[type=text] {
+                padding: 12px 20px;
+                font-family: 'Trebuchet MS', sans-serif;
+            }
+            label {
+                font-family: 'Trebuchet MS', sans-serif;
+            }
+            button {
+                background-color: #4CAF50;
+                color: white;
+                padding: 14px 20px;
+                margin: 0px;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+                font-family: 'Trebuchet MS', sans-serif;
+            }
+            button:hover {
+                background-color: #45a049;
+            }
+            #gameBox {
+                display: flex;
+                border-radius: 8px;
+                padding: 20px;
+                background-color: #f2f2f2;
+                border: 4px solid #555;
+                width: 60%;
+<<<<<<< HEAD
+                height: 45%;
+=======
+>>>>>>> 8704a4e8d83620e50984d62cb87a22db3eaabfd6
+                margin:auto;
+            }
+            #map{
+                border-radius: 8px;
+                padding: 20px;
+                background-color: #f2f2f2;
+<<<<<<< HEAD
+                border: 4px solid #555;                
+                width: 60%;
+                height: 25%;
+=======
+                border: 4px solid #555;
+                height: 280px;
+                width: 60%;
+>>>>>>> 8704a4e8d83620e50984d62cb87a22db3eaabfd6
+                margin:auto;
+            }            
+        </style>
+    </head>
+    <body>
+
+        <!-- Banner -->
+        <h1 id="bannerText">ArtGuessr</h1> 
+
+        <!-- Formatting Box for Game -->
+        <div id="gameBox">
+
+            
+            <div>
+                <!-- Username Form -->
+                <form id = 'uNameInput'>
+                    <label id = "uNameFieldLabel" for="uName">Enter your Username:<br></label>
+                    <input id="uNameField" type="text" placeholder="Your username..."> 
+                </form>
+
+                <!-- Info Text for Users -->
+                <p id='infoText'>Input a username and click the green button to get started!</p>
+
+                <!-- New Game Button -->
+                <button id="uNameSubmit" type="button">Click here to start a new round!</button>            
+            </div>
+
+            <!-- Art -->
+            <img src="https://i.imgur.com/elo4jqy.jpeg" id="art" src="" alt="Art" />
+            
+
+            
+        </div>
+        </div>
+        <div id="map"></div>
+    </body>
+    
+</html>
+
+<script>
+    var backend_url = 'http:localhost:3000'
+    var image_url = "https://media0.giphy.com/media/l1K9Dcy7ww0CW3JHq/giphy.gif"
+    var answer = "Algeria"
+
+    function startGame() {
+        var nameField = document.getElementById('uNameField').value;
+        var result = document.getElementById("infoText");
+        setColors("555");
+        document.getElementById("infoText").innerHTML = "Loading new art, this might take a moment..."
+        if (nameField.length < 2) {
+            document.getElementById("infoText").innerHTML = "Username must be at least 2 characters."
+        } else {
+            document.getElementById("art").src = "https://acegif.com/wp-content/uploads/loading-78.gif"
+            get_game(nameField);
+            return nameField;
+        }
+    }
+
+    var subButton = document.getElementById('uNameSubmit');
+    subButton.addEventListener('click', startGame, false);
+
+    async function get_game(user) {
+        const response = await fetch(backend_url, {
+            method: "post",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({username: user})
+        });
+        const data = await response.json();
+        new_game = data;
+        image_url = new_game.image;
+        answer = new_game.solution;
+        var new_art_image = new_game.image;
+        var new_art_answer = new_game.solution;
+        document.getElementById("art").src = new_art_image;
+        answer = new_art_answer;
+        document.getElementById("infoText").innerHTML = "Where do you think this piece originated?"
+    }
+
+    function setColors(color) {
+        document.getElementById("gameBox").style.borderColor = color;
+        document.getElementById("map").style.borderColor = color;
+        document.getElementById("bannerText").style.color = color;
+    }
+
+    function check_guess(guess) {
+        if (guess == answer) {
+            setColors("LimeGreen");
+            document.getElementById("infoText").innerHTML = "Correct!"
+            
+        } else {
+            setColors("red");
+            document.getElementById("infoText").innerHTML = "Incorrect! The correct answer was ".concat(answer);
+        };
+    }
+    
+    function initMap() {
+        var myLatlng = { lat: 0, lng: 0 };
+        const geocoder = new google.maps.Geocoder();
+        const map = new google.maps.Map(document.getElementById("map"), {
+            zoom: 2,
+            center: myLatlng,
+        });
+        let infoWindow = new google.maps.InfoWindow({
+            content: "Click a country to submit a guess!",
+            position: myLatlng,
+        });
+
+        infoWindow.open(map);
+        map.addListener("click", (mapsMouseEvent) => {
+            // Close the current InfoWindow.
+            infoWindow.close();
+
+            // Create a new InfoWindow.
+            infoWindow = new google.maps.InfoWindow({
+             position: mapsMouseEvent.latLng,
+            });
+            
+            infoWindow.setContent(
+                
+                JSON.stringify(mapsMouseEvent.latLng.toJSON(), null, 2)
+            );
+            myLatLng = mapsMouseEvent.latLng.toJSON()
+
+            geocoder
+                .geocode({ location: myLatLng })
+                .then((response) => {
+                console.log(response)
+                
+                if (response.results[response.results.length - 1]) {
+                    infoWindow.setContent(response.results[response.results.length - 1].formatted_address);
+                    var guess = response.results[response.results.length - 1].formatted_address;
+                    check_guess(guess);
+                } else {
+                    window.alert("No results found");
+                }
+                })
+                .catch((e) => window.alert("Geocoder failed due to: " + e));
+            infoWindow.open(map);
+        });
+    }
+    window.initMap = initMap;    
+</script>
+
+<script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAFU_P2bNacsOeQ-RQsRgyOdmnUDDxSHLA&callback=initMap">
+ </script>
