@@ -9,6 +9,9 @@
         ArtGuessr
     </title>
     <style>
+        body {
+            background-color: #555;
+        }
         img {
             display: inline-block;
             margin-left: auto;
@@ -20,7 +23,7 @@
         h1 {
             font-size: 6vh;
             text-align: center;
-            color: "black";
+            color: "white";
             font-weight: bold;
             font-family: 'Trebuchet MS', sans-serif;
         }
@@ -43,7 +46,6 @@
 
         button {
             background-color: #4CAF50;
-            color: white;
             padding: 14px 20px;
             margin: 0px;
             border: none;
@@ -82,7 +84,7 @@
 <body>
 
     <!-- Banner -->
-    <h1 id="bannerText">ArtGuessr</h1>
+    <h1 id="bannerText" style="color:white">ArtGuessr</h1>
 
     <!-- Formatting Box for Game -->
     <div id="gameBox">
@@ -99,7 +101,7 @@
             <p id='infoText'>Input a username and click the green button to get started!</p>
 
             <!-- New Game Button -->
-            <button id="uNameSubmit" type="button">Click here to start a new round!</button>
+            <button id="uNameSubmit" type="button" style="color:#f2f2f2">Click here to start a new round!</button>
         </div>
 
         <!-- Art -->
@@ -122,7 +124,7 @@
     function startGame() {
         var nameField = document.getElementById('uNameField').value;
         var result = document.getElementById("infoText");
-        setColors("555");
+        setColors("#555");
         document.getElementById("infoText").innerHTML = "Loading new art, this might take a moment..."
         if (nameField.length < 2) {
             document.getElementById("infoText").innerHTML = "Username must be at least 2 characters."
@@ -156,7 +158,6 @@
     function setColors(color) {
         document.getElementById("gameBox").style.borderColor = color;
         document.getElementById("map").style.borderColor = color;
-        document.getElementById("bannerText").style.color = color;
     }
 
     function check_guess(guess) {
