@@ -5,9 +5,10 @@ const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
+
 const axios = require('axios');
 
-const { appendFile } = require("fs");
+const { appendFile, rmSync } = require("fs");
 
 const cors = require('cors');
 app.use(cors({
@@ -17,60 +18,13 @@ app.use(cors({
 const { response } = require("express");
 const { get } = require("http");
 
-// MongoDB Setup
-/*
-const { MongoClient } = require('mongodb');
-const { mainModule } = require("process");
-
-async function listDB(client) {
-  databasesList = await client.db().admin().listDatabases();
-
-  console.log("Databases are as follow:");
-  databasesList.databases.forEach(db => console.log(` - ${db.name}`));
-}
-
-async function mongoMain() {
-  
-  // MongoDB collection URI
-  const URI = "mongodb+srv://MichaelW:kjDVUq5Qd2QbD3Z@cluster0.xxkt1rl.mongodb.net/sample_airbnb?retryWrites=true&w=majority";
-  const client = new MongoClient(URI);
-  try {
-    // Connect to the MongoDB Cluster
-    await client.connect();
-
-    await createEntry(client,
-      {
-        _id: "testID",
-        name: "Lovely Loft",
-        summary: "A charming loft in Paris",
-        bedrooms: 1,
-        bathrooms: 1
-      }
-    );
-    await listDB(client);
-  } catch (errorText) {
-    console.error(errorText);
-  } finally {
-    await client.close();
-  }
-}
-
-mongoMain().catch(console.error);
-
-async function createEntry(client, newEntry) {
-  const result = await client.db("sample_airbnb").collection("listingsAndReviews").insertOne(newEntry);
-  console.log(`New entry created with the following ID: ${result.insertedID}`);
-}
-*/
-// -------------
-
 // Code for generating links to random objects in the MET API
 const API_URL = 'https://collectionapi.metmuseum.org/public/collection/v1/objects/';
 
 var total = 65563; // working with a smaller library until auto-looping is up and running
 
 function getRandomObjectURL() {
-    return API_URL.concat((Math.floor(Math.random() * total)).toString());
+  return API_URL.concat((Math.floor(Math.random() * total)).toString());
 }
 
 /* Define for a library of values used for game balance. 
@@ -83,7 +37,7 @@ var Balance = {
   "United States": 0.1,
   "Japan": 0.25,
   "France": 0.9
-}; 
+};
 
 function reroll(country) {
   var weight = Balance[country];
@@ -141,7 +95,7 @@ function getArt(req, res) {
   // GET request to MET and response to frontend  
   do {
     axios.get(getRandomObjectURL())
-    .then(response => {
+      .then(response => {
 
         // Storing useful data
         data = response.data;
@@ -166,7 +120,7 @@ function getArt(req, res) {
           } else {
             console.log("Winner, winner!")
             // Success via reroll
-            var package = {"image":imageURL, "solution":solution};
+            var package = { "image": imageURL, "solution": solution };
             res.send(package);
             console.log("Valid artwork requested, sent the following:");
             console.log(package);
@@ -174,19 +128,19 @@ function getArt(req, res) {
           }
         } else {
           // Success
-          var package = {"image":imageURL, "solution":solution};
+          var package = { "image": imageURL, "solution": solution };
           res.send(package);
           console.log("Valid artwork requested, sent the following:");
           console.log(package);
           console.log(req.body.username);
-        }                
-    })
+        }
+      })
 
-    // Error catching, mostly for calling invalid object ID's
-    .catch(error => {
-      console.log("Invalid MET Request, retrying.");
-      getArt(req, res);
-    });
+      // Error catching, mostly for calling invalid object ID's
+      .catch(error => {
+        console.log("Invalid MET Request, retrying.");
+        getArt(req, res);
+      });
   } while (publicDomain == false || solution == "");
 }
 
@@ -198,3 +152,6 @@ app.post("/", function (req, res) {
 app.listen(3000, function () {
   console.log("Server is listening on localhost:3000");
 });
+
+
+
