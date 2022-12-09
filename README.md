@@ -2,7 +2,7 @@
 
 Collaborative project between Karim Benromdhane, Simon Kye, Mustafa Taybah, and Michael Walsh
 
-This project was created as part of a CS411 at Boston University under Professor Donham in the Fall semester of 2022.
+This project was created as part of CS411 at Boston University under Professor Donham in the Fall semester of 2022.
 
 Current iteration includes the basic code to make the game function, future versions might include Google OAuth and leaderboard.
 
