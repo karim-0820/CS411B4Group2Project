@@ -7,6 +7,7 @@
     <meta name="google-signin-client_id"
         content="1021616953488-mt2gfg5f4c2ja6qmq2vjm9k2rpmuqsea.apps.googleusercontent.com">
     <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script src="https://unpkg.com/jwt-decode/build/jwt-decode.js"></script>
     <title>Login</title>
 </head>
 
@@ -18,10 +19,7 @@
     </div>
     <script>
         function handleCredentialResponse(response) {
-            // decodeJwtResponse() is still not set up
-            // decodeJwtResponse() is a custom function defined by you
-            // to decode the credential response.
-            const responsePayload = decodeJwtResponse(response.credential);
+            const responsePayload = jwt_decode(response.credential);
 
             console.log("ID: " + responsePayload.sub);
             console.log('Full Name: ' + responsePayload.name);
