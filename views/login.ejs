@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="google-signin-client_id"
+        content="1021616953488-mt2gfg5f4c2ja6qmq2vjm9k2rpmuqsea.apps.googleusercontent.com">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <title>Login</title>
+</head>
+
+<body>
+
+    <h1>Login</h1>
+    <div id="g_id_onload" data-client_id="1021616953488-mt2gfg5f4c2ja6qmq2vjm9k2rpmuqsea.apps.googleusercontent.com"
+        data-callback="handleCredentialResponse">
+    </div>
+    <script>
+        function handleCredentialResponse(response) {
+            // decodeJwtResponse() is still not set up
+            // decodeJwtResponse() is a custom function defined by you
+            // to decode the credential response.
+            const responsePayload = decodeJwtResponse(response.credential);
+
+            console.log("ID: " + responsePayload.sub);
+            console.log('Full Name: ' + responsePayload.name);
+            console.log('Given Name: ' + responsePayload.given_name);
+            console.log('Family Name: ' + responsePayload.family_name);
+            console.log("Image URL: " + responsePayload.picture);
+            console.log("Email: " + responsePayload.email);
+        }
+    </script>
+    <div class="g_id_signin" data-type="standard" data-size="large" data-theme="outline" data-text="sign_in_with"
+        data-shape="rectangular" data-logo_alignment="left">
+    </div>
+</body>
+
+</html>
