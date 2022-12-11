@@ -91,6 +91,33 @@
 
 <body>
 
+    <div id="enterDetails">
+        <h1>Enter details</h1>
+
+        <h4>ID</h4> 
+        <input id="enterID" type="text"> 
+
+        <h4>Name</h4> 
+        <input id="enterName" type="text"> 
+
+        <h4>Age</h4> 
+        <input id="enterAge" type="number"> <br><br>
+
+        <button id="insert">INSERT</button>
+        <button id="update">UPDATE</button>
+        <button id="remove">REMOVE</button> <br><br>
+    </div>
+
+    <div id="findDetails">
+        <h1>Find by ID</h1>
+        <h4>ID</h4>
+        <input id="findID" type="text"> <br><br>
+        <button id="find">FIND</button>
+        <h3 id="findName" type="text"></h3>
+        <h3 id="findAge" type="number"></h3> <br><br>
+    </div>
+
+
     <h1>Login</h1>
     <div id="g_id_onload" data-client_id="872248582990-q1itv7mi6i6up5ivp2cike2nh6c1umg5.apps.googleusercontent.com"
         data-callback="handleCredentialResponse">
@@ -133,6 +160,104 @@
 
 </html>
 
+<script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js"
+    // TODO: Add SDKs for Firebase products that you want to use
+    // https://firebase.google.com/docs/web/setup#available-libraries
+
+    // Your web app's Firebase configuration
+    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+    const firebaseConfig = {
+    apiKey: "AIzaSyA3lvQv4Y1dRm7kXLhS3EUl9DWcrv37i08",
+    authDomain: "artguessr-581b8.firebaseapp.com",
+    databaseURL: "https://artguessr-581b8-default-rtdb.firebaseio.com",
+    projectId: "artguessr-581b8",
+    storageBucket: "artguessr-581b8.appspot.com",
+    messagingSenderId: "722133732238",
+    appId: "1:722133732238:web:e0122f33d06945ed9ef2df",
+    measurementId: "G-FYPYSESQ21"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+
+    import {getDatabase, set, get, update, remove, ref, child} from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js"
+
+    const db = getDatabase();
+    var enterID = document.querySelector("#enterID");
+    var enterName = document.querySelector("#enterName");
+    var enterAge = document.querySelector("#enterAge");
+    var findID = document.querySelector("#findID");
+    var findName = document.querySelector("#findName");
+    var findAge = document.querySelector("#findAge");
+
+    var insertBtn = document.querySelector("#insert");
+    var updateBtn = document.querySelector("#update");
+    var removeBtn = document.querySelector("#remove");
+    var findBtn = document.querySelector("#find");
+
+    function insertData() {
+        set(ref(db, "People/" + enterID.value), {
+            Name: enterName.value,
+            ID: enterID.value,
+            Age: enterAge.value
+        })
+        .then(() => {
+            alert("Data added successfully")
+        })
+        .catch((error) => {
+            alert(error)
+        });
+    }
+
+    function findData() {
+        const dbref = ref(db);
+
+        get(child(dbref, "People/" + findID.value))
+        .then((snapshot) => {
+            if (snapshot.exists()) {
+                findName.innerHTML = "Name: " + snapshot.val().Name;
+                findAge.innerHTML = "Age: " + snapshot.val().Age;
+            } else {
+                alert("No data found");
+            }
+        })
+        .catch((error) => {
+            alert(error);
+        })
+    }
+
+    function updateData(){
+        update(ref(db, "People/"+ enterID.value),{
+            Name: enterName.value,
+            Age: enterAge.value
+        })
+        .then(()=>{
+            alert("Data updated successfully");
+        })
+        .catch((error)=>{
+            alert(error);
+        });
+    }
+
+    function removeData(){
+        remove(ref(db, "People/"+ enterID.value))
+        .then(()=>{
+            alert("Data deleted successfully");
+        })
+        .catch((error)=>{
+            alert(error);
+        });
+    }
+
+    insertBtn.addEventListener('click', insertData);
+    updateBtn.addEventListener('click', updateData);
+    removeBtn.addEventListener('click', removeData);
+    findBtn.addEventListener('click', findData);
+
+</script>
+
 <script>
     var backend_url = 'http:localhost:3000'
     var image_url = "https://media0.giphy.com/media/l1K9Dcy7ww0CW3JHq/giphy.gif"
@@ -149,6 +274,7 @@
         console.log("Email: " + responsePayload.email);
     }
 
+    
     function startGame() {
         var nameField = document.getElementById('uNameField').value;
         var result = document.getElementById("infoText");
