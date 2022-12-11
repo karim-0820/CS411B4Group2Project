@@ -125,6 +125,10 @@
     <h3 id="welcome" type="text">Welcome Guest</h3>
     <h3 id="scoring" type="text"></h3>
 
+    <h3 id = "userId" hidden></h3>
+    <h3 id = "games" hidden></h3>
+    <h3 id = "wins" hidden></h3>
+
 
     <div class="g_id_signin" data-type="standard" data-size="large" data-theme="outline" data-text="sign_in_with"
         data-shape="rectangular" data-logo_alignment="left">
@@ -189,80 +193,13 @@
     import {getDatabase, set, get, update, remove, ref, child} from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js"
 
     const db = getDatabase();
-    // var enterID = document.querySelector("#enterID");
-    // var enterName = document.querySelector("#enterName");
-    // var enterAge = document.querySelector("#enterAge");
-    // var findID = document.querySelector("#findID");
-    // var findName = document.querySelector("#findName");
-    // var findAge = document.querySelector("#findAge");
-
-    // var insertBtn = document.querySelector("#insert");
-    // var updateBtn = document.querySelector("#update");
-    // var removeBtn = document.querySelector("#remove");
-    // var findBtn = document.querySelector("#find");
-
-    // function insertData() {
-    //     set(ref(db, "People/" + enterID.value), {
-    //         Name: enterName.value,
-    //         ID: enterID.value,
-    //         Age: enterAge.value
-    //     })
-    //     .then(() => {
-    //         alert("Data added successfully")
-    //     })
-    //     .catch((error) => {
-    //         alert(error)
-    //     });
-    // }
-
-    // function findData() {
-    //     const dbref = ref(db);
-
-    //     get(child(dbref, "People/" + findID.value))
-    //     .then((snapshot) => {
-    //         if (snapshot.exists()) {
-    //             findName.innerHTML = "Name: " + snapshot.val().Name;
-    //             findAge.innerHTML = "Age: " + snapshot.val().Age;
-    //         } else {
-    //             alert("No data found");
-    //         }
-    //     })
-    //     .catch((error) => {
-    //         alert(error);
-    //     })
-    // }
-
-    // function updateData(){
-    //     update(ref(db, "People/"+ enterID.value),{
-    //         Name: enterName.value,
-    //         Age: enterAge.value
-    //     })
-    //     .then(()=>{
-    //         alert("Data updated successfully");
-    //     })
-    //     .catch((error)=>{
-    //         alert(error);
-    //     });
-    // }
-
-    // function removeData(){
-    //     remove(ref(db, "People/"+ enterID.value))
-    //     .then(()=>{
-    //         alert("Data deleted successfully");
-    //     })
-    //     .catch((error)=>{
-    //         alert(error);
-    //     });
-    // }
-
-    // insertBtn.addEventListener('click', insertData);
-    // updateBtn.addEventListener('click', updateData);
-    // removeBtn.addEventListener('click', removeData);
-    // findBtn.addEventListener('click', findData);
 
     var welcome = document.querySelector("#welcome");
     var scoring = document.querySelector("#scoring");
     var login = document.querySelector("#login");
+    var hiddenWins = document.querySelector("#wins");
+    var hiddenGames = document.querySelector("#games");
+    var hiddenId = document.querySelector("#userId")
     
     window.handleCredentialResponse = (response) => {
         const responsePayload = jwt_decode(response.credential);
@@ -303,6 +240,9 @@
                 welcome.innerHTML = "Welcome " + snapshot.val().Name
                 scoring.innerHTML = "Total Wins = " + snapshot.val().Wins + ", Total Games = " + snapshot.val().Games
                 login.innerHTML = ""
+                hiddenGames.innerHTML = snapshot.val().Games
+                hiddenWins.innerHTML = snapshot.val().Wins
+                hiddenId.innerHTML = id
                 valid = true;
             } else {
                 valid = false;
@@ -314,6 +254,32 @@
         })
         console.log(valid)
         return valid;
+    }
+
+    window.updateScore = (correct) => {
+        const dbref = ref(db);
+        if (correct) {
+            update(ref(db, "User/" + hiddenId.innerHTML), {
+                Wins: parseInt(hiddenWins.innerHTML) + 1,
+                Games: parseInt(hiddenGames.innerHTML) + 1
+            })
+            .then(()=>{
+                alert("Data updated successfully");
+            })
+            .catch((error)=>{
+                alert(error);
+            });
+        } else {
+            update(ref(db, "User/" + hiddenId.innerHTML),{
+                Games: parseInt(hiddenGames.innerHTML) + 1
+            })
+            .then(()=>{
+                alert("Data updated successfully");
+            })
+            .catch((error)=>{
+                alert(error);
+            });
+        }
     }
 </script>
 
@@ -365,10 +331,11 @@
         if (guess == answer) {
             setColors("LimeGreen");
             document.getElementById("infoText").innerHTML = "Correct!"
-
+            updateScore(true);
         } else {
             setColors("red");
             document.getElementById("infoText").innerHTML = "Incorrect! The correct answer was ".concat(answer);
+            updateScore(false);
         };
     }
 
