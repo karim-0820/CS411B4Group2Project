@@ -6,7 +6,7 @@ This project was created as part of CS411 at Boston University under Professor D
 
 Current iteration includes google account integration and score tracking.
 
-Code is designed to run both frontend and backend locally, with a nodejs instance running the backend (app.js), and the frontend being browser-based.
+Install all packages in packages.json before attempting to run.
 
 This project uses the following APIs: MET Collection API (https://metmuseum.github.io), Google Maps API (https://developers.google.com/maps), and Google Geocoding (https://developers.google.com/maps/documentation/geocoding).
 
