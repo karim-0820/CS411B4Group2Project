@@ -86,12 +86,11 @@
         content="872248582990-q1itv7mi6i6up5ivp2cike2nh6c1umg5.apps.googleusercontent.com">
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <script src="https://unpkg.com/jwt-decode/build/jwt-decode.js"></script>
-    <title>Login</title>
 </head>
 
 <body>
 
-    <div id="enterDetails">
+    <!-- <div id="enterDetails">
         <h1>Enter details</h1>
 
         <h4>ID</h4> 
@@ -115,17 +114,22 @@
         <button id="find">FIND</button>
         <h3 id="findName" type="text"></h3>
         <h3 id="findAge" type="number"></h3> <br><br>
-    </div>
+    </div> -->
 
 
-    <h1>Login</h1>
+    <h1 id="login">Login</h1>
     <div id="g_id_onload" data-client_id="872248582990-q1itv7mi6i6up5ivp2cike2nh6c1umg5.apps.googleusercontent.com"
         data-callback="handleCredentialResponse">
     </div>
-   
+
+    <h3 id="welcome" type="text">Welcome Guest</h3>
+    <h3 id="scoring" type="text"></h3>
+
+
     <div class="g_id_signin" data-type="standard" data-size="large" data-theme="outline" data-text="sign_in_with"
         data-shape="rectangular" data-logo_alignment="left">
     </div>
+
 
     <!-- Banner -->
     <h1 id="bannerText" style="color:white">ArtGuessr</h1>
@@ -185,95 +189,138 @@
     import {getDatabase, set, get, update, remove, ref, child} from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js"
 
     const db = getDatabase();
-    var enterID = document.querySelector("#enterID");
-    var enterName = document.querySelector("#enterName");
-    var enterAge = document.querySelector("#enterAge");
-    var findID = document.querySelector("#findID");
-    var findName = document.querySelector("#findName");
-    var findAge = document.querySelector("#findAge");
+    // var enterID = document.querySelector("#enterID");
+    // var enterName = document.querySelector("#enterName");
+    // var enterAge = document.querySelector("#enterAge");
+    // var findID = document.querySelector("#findID");
+    // var findName = document.querySelector("#findName");
+    // var findAge = document.querySelector("#findAge");
 
-    var insertBtn = document.querySelector("#insert");
-    var updateBtn = document.querySelector("#update");
-    var removeBtn = document.querySelector("#remove");
-    var findBtn = document.querySelector("#find");
+    // var insertBtn = document.querySelector("#insert");
+    // var updateBtn = document.querySelector("#update");
+    // var removeBtn = document.querySelector("#remove");
+    // var findBtn = document.querySelector("#find");
 
-    function insertData() {
-        set(ref(db, "People/" + enterID.value), {
-            Name: enterName.value,
-            ID: enterID.value,
-            Age: enterAge.value
+    // function insertData() {
+    //     set(ref(db, "People/" + enterID.value), {
+    //         Name: enterName.value,
+    //         ID: enterID.value,
+    //         Age: enterAge.value
+    //     })
+    //     .then(() => {
+    //         alert("Data added successfully")
+    //     })
+    //     .catch((error) => {
+    //         alert(error)
+    //     });
+    // }
+
+    // function findData() {
+    //     const dbref = ref(db);
+
+    //     get(child(dbref, "People/" + findID.value))
+    //     .then((snapshot) => {
+    //         if (snapshot.exists()) {
+    //             findName.innerHTML = "Name: " + snapshot.val().Name;
+    //             findAge.innerHTML = "Age: " + snapshot.val().Age;
+    //         } else {
+    //             alert("No data found");
+    //         }
+    //     })
+    //     .catch((error) => {
+    //         alert(error);
+    //     })
+    // }
+
+    // function updateData(){
+    //     update(ref(db, "People/"+ enterID.value),{
+    //         Name: enterName.value,
+    //         Age: enterAge.value
+    //     })
+    //     .then(()=>{
+    //         alert("Data updated successfully");
+    //     })
+    //     .catch((error)=>{
+    //         alert(error);
+    //     });
+    // }
+
+    // function removeData(){
+    //     remove(ref(db, "People/"+ enterID.value))
+    //     .then(()=>{
+    //         alert("Data deleted successfully");
+    //     })
+    //     .catch((error)=>{
+    //         alert(error);
+    //     });
+    // }
+
+    // insertBtn.addEventListener('click', insertData);
+    // updateBtn.addEventListener('click', updateData);
+    // removeBtn.addEventListener('click', removeData);
+    // findBtn.addEventListener('click', findData);
+
+    var welcome = document.querySelector("#welcome");
+    var scoring = document.querySelector("#scoring");
+    var login = document.querySelector("#login");
+    
+    window.handleCredentialResponse = (response) => {
+        const responsePayload = jwt_decode(response.credential);
+        
+        console.log("ID: " + responsePayload.sub);
+        if (!findUserData(responsePayload.sub)) {
+            insertUserData(responsePayload.sub, responsePayload.name);
+        }
+        console.log('Full Name: ' + responsePayload.name);
+        console.log('Given Name: ' + responsePayload.given_name);
+        console.log('Family Name: ' + responsePayload.family_name);
+        console.log("Image URL: " + responsePayload.picture);
+        console.log("Email: " + responsePayload.email);
+
+    }
+
+    function insertUserData(id, name) {
+        set(ref(db, "User/" + id), {
+            Id: id,
+            Name: name,
+            Wins: 0,
+            Games: 0
         })
         .then(() => {
-            alert("Data added successfully")
+            findUserData(id)
         })
         .catch((error) => {
             alert(error)
         });
     }
-
-    function findData() {
+    function findUserData(id) {
+        console.log(id)
         const dbref = ref(db);
-
-        get(child(dbref, "People/" + findID.value))
-        .then((snapshot) => {
+        var valid;
+        get(child(dbref, "User/" + id))
+        .then ((snapshot) => {
             if (snapshot.exists()) {
-                findName.innerHTML = "Name: " + snapshot.val().Name;
-                findAge.innerHTML = "Age: " + snapshot.val().Age;
+                welcome.innerHTML = "Welcome " + snapshot.val().Name
+                scoring.innerHTML = "Total Wins = " + snapshot.val().Wins + ", Total Games = " + snapshot.val().Games
+                login.innerHTML = ""
+                valid = true;
             } else {
-                alert("No data found");
+                valid = false;
             }
         })
         .catch((error) => {
             alert(error);
+            valid = false;
         })
+        console.log(valid)
+        return valid;
     }
-
-    function updateData(){
-        update(ref(db, "People/"+ enterID.value),{
-            Name: enterName.value,
-            Age: enterAge.value
-        })
-        .then(()=>{
-            alert("Data updated successfully");
-        })
-        .catch((error)=>{
-            alert(error);
-        });
-    }
-
-    function removeData(){
-        remove(ref(db, "People/"+ enterID.value))
-        .then(()=>{
-            alert("Data deleted successfully");
-        })
-        .catch((error)=>{
-            alert(error);
-        });
-    }
-
-    insertBtn.addEventListener('click', insertData);
-    updateBtn.addEventListener('click', updateData);
-    removeBtn.addEventListener('click', removeData);
-    findBtn.addEventListener('click', findData);
-
 </script>
 
 <script>
     var backend_url = 'http:localhost:3000'
     var image_url = "https://media0.giphy.com/media/l1K9Dcy7ww0CW3JHq/giphy.gif"
     var answer = "Algeria"
-    
-    function handleCredentialResponse(response) {
-        const responsePayload = jwt_decode(response.credential);
-
-        console.log("ID: " + responsePayload.sub);
-        console.log('Full Name: ' + responsePayload.name);
-        console.log('Given Name: ' + responsePayload.given_name);
-        console.log('Family Name: ' + responsePayload.family_name);
-        console.log("Image URL: " + responsePayload.picture);
-        console.log("Email: " + responsePayload.email);
-    }
-
     
     function startGame() {
         var nameField = document.getElementById('uNameField').value;
