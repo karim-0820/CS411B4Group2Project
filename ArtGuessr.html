@@ -90,32 +90,6 @@
 
 <body>
 
-    <!-- <div id="enterDetails">
-        <h1>Enter details</h1>
-
-        <h4>ID</h4> 
-        <input id="enterID" type="text"> 
-
-        <h4>Name</h4> 
-        <input id="enterName" type="text"> 
-
-        <h4>Age</h4> 
-        <input id="enterAge" type="number"> <br><br>
-
-        <button id="insert">INSERT</button>
-        <button id="update">UPDATE</button>
-        <button id="remove">REMOVE</button> <br><br>
-    </div>
-
-    <div id="findDetails">
-        <h1>Find by ID</h1>
-        <h4>ID</h4>
-        <input id="findID" type="text"> <br><br>
-        <button id="find">FIND</button>
-        <h3 id="findName" type="text"></h3>
-        <h3 id="findAge" type="number"></h3> <br><br>
-    </div> -->
-
 
     <h1 id="login">Login</h1>
     <div id="g_id_onload" data-client_id="872248582990-q1itv7mi6i6up5ivp2cike2nh6c1umg5.apps.googleusercontent.com"
@@ -199,15 +173,13 @@
     var login = document.querySelector("#login");
     var hiddenWins = document.querySelector("#wins");
     var hiddenGames = document.querySelector("#games");
-    var hiddenId = document.querySelector("#userId")
+    var hiddenId = document.querySelector("#userId");
     
     window.handleCredentialResponse = (response) => {
         const responsePayload = jwt_decode(response.credential);
         
         console.log("ID: " + responsePayload.sub);
-        if (!findUserData(responsePayload.sub)) {
-            insertUserData(responsePayload.sub, responsePayload.name);
-        }
+        findUserData(responsePayload.sub, responsePayload.name)
         console.log('Full Name: ' + responsePayload.name);
         console.log('Given Name: ' + responsePayload.given_name);
         console.log('Family Name: ' + responsePayload.family_name);
@@ -230,7 +202,7 @@
             alert(error)
         });
     }
-    function findUserData(id) {
+    function findUserData(id, name) {
         console.log(id)
         const dbref = ref(db);
         var valid;
@@ -243,9 +215,8 @@
                 hiddenGames.innerHTML = snapshot.val().Games
                 hiddenWins.innerHTML = snapshot.val().Wins
                 hiddenId.innerHTML = id
-                valid = true;
             } else {
-                valid = false;
+                insertUserData(id, name);
             }
         })
         .catch((error) => {
@@ -284,7 +255,8 @@
 </script>
 
 <script>
-    var backend_url = 'http:localhost:3000'
+    // var backend_url = 'http:localhost:3000'
+    var backend_url = 'https://artguessr.onrender.com'
     var image_url = "https://media0.giphy.com/media/l1K9Dcy7ww0CW3JHq/giphy.gif"
     var answer = "Algeria"
     
