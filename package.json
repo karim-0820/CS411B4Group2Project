@@ -15,8 +15,5 @@
     "jsonwebtoken": "^8.5.1",
     "mongodb": "^4.12.1",
     "parser": "^0.1.4"
-  },
-  "devDependencies": {
-    "@web/dev-server": "^0.1.35"
   }
 }
