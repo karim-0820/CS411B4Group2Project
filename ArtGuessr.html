@@ -1,4 +1,3 @@
-<script src="jquery-3.6.0.min.js"></script>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 
 <!DOCTYPE html>
@@ -80,8 +79,26 @@
         }
     </style>
 </head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="google-signin-client_id"
+        content="872248582990-q1itv7mi6i6up5ivp2cike2nh6c1umg5.apps.googleusercontent.com">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script src="https://unpkg.com/jwt-decode/build/jwt-decode.js"></script>
+    <title>Login</title>
+</head>
 
 <body>
+
+    <h1>Login</h1>
+    <div id="g_id_onload" data-client_id="872248582990-q1itv7mi6i6up5ivp2cike2nh6c1umg5.apps.googleusercontent.com"
+        data-callback="handleCredentialResponse">
+    </div>
+   
+    <div class="g_id_signin" data-type="standard" data-size="large" data-theme="outline" data-text="sign_in_with"
+        data-shape="rectangular" data-logo_alignment="left">
+    </div>
 
     <!-- Banner -->
     <h1 id="bannerText" style="color:white">ArtGuessr</h1>
@@ -120,6 +137,20 @@
     var backend_url = 'http:localhost:3000'
     var image_url = "https://media0.giphy.com/media/l1K9Dcy7ww0CW3JHq/giphy.gif"
     var answer = "Algeria"
+    var userId = "null"
+    var userName = "null"
+    <script>
+        function handleCredentialResponse(response) {
+            const responsePayload = jwt_decode(response.credential);
+
+            console.log("ID: " + responsePayload.sub);
+            console.log('Full Name: ' + responsePayload.name);
+            console.log('Given Name: ' + responsePayload.given_name);
+            console.log('Family Name: ' + responsePayload.family_name);
+            console.log("Image URL: " + responsePayload.picture);
+            console.log("Email: " + responsePayload.email);
+        }
+    </script>
 
     function startGame() {
         var nameField = document.getElementById('uNameField').value;
