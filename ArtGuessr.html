@@ -137,20 +137,17 @@
     var backend_url = 'http:localhost:3000'
     var image_url = "https://media0.giphy.com/media/l1K9Dcy7ww0CW3JHq/giphy.gif"
     var answer = "Algeria"
-    var userId = "null"
-    var userName = "null"
-    <script>
-        function handleCredentialResponse(response) {
-            const responsePayload = jwt_decode(response.credential);
+    
+    function handleCredentialResponse(response) {
+        const responsePayload = jwt_decode(response.credential);
 
-            console.log("ID: " + responsePayload.sub);
-            console.log('Full Name: ' + responsePayload.name);
-            console.log('Given Name: ' + responsePayload.given_name);
-            console.log('Family Name: ' + responsePayload.family_name);
-            console.log("Image URL: " + responsePayload.picture);
-            console.log("Email: " + responsePayload.email);
-        }
-    </script>
+        console.log("ID: " + responsePayload.sub);
+        console.log('Full Name: ' + responsePayload.name);
+        console.log('Given Name: ' + responsePayload.given_name);
+        console.log('Family Name: ' + responsePayload.family_name);
+        console.log("Image URL: " + responsePayload.picture);
+        console.log("Email: " + responsePayload.email);
+    }
 
     function startGame() {
         var nameField = document.getElementById('uNameField').value;
