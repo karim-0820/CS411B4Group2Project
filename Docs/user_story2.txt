@@ -1,5 +1,5 @@
 User Story 2 - Game (Good Path)
 User will click start game and be shown an artwork and a map of the world.
-User will click on the map and will be shown how far they were from their original guess.
-They will be assigned a score depending on how far they were from the artwork's origin country.
-If user guessed correctly, one will be added to the score and reset to 0 if guessed incorrectly
+User will click on the map and will be told if their guess is correct or not.
+If they are incorrect, they may be told what the correct country was.
+If user guessed correctly, one will be added to the score.
