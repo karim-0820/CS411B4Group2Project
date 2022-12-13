@@ -1,8 +1,13 @@
-User logs in to application
+User logs in to application for the first time
 User starts game, and is prompted with artwork
 User guesses an incorrect location (ex. France for Belgian art)
-User is told their guess is incorrect, that they have 2 tries remaining
-User guess an incorrect location (ex. Switzerland)
-User is told their guess is incorrect, that they have 1 try remaining
+User is told their guess is incorrect, the correct answer was Belgium.
+  They now have 1 games played and 0 wins.
+User starts a new round.
+User guess an incorrect location.
+User is told their guess is incorrect and the correct answer.
+  They now have 2 games played and 0 wins.
+User starts a new round.
 User guesses correctly
-User is told their guess is correct, receives 1/3 points for this round
+User is told their guess is correct.
+  They now have 3 games played and 1 win.
